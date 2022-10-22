@@ -1,10 +1,6 @@
 import Link from "next/link";
-import { useAtom } from "jotai";
-import { userAtom } from "../../../store/Auth";
 
 function Header() {
-  const [user] = useAtom(userAtom);
-
   const links: Link[] = [
     { name: "Projects", href: "/projects", icon: "" },
     { name: "Ideas", href: "/ideas", icon: "" },
