@@ -9,7 +9,7 @@ function CreateTask({
   buttonStyle = "button",
 }: {
   projectId: string | undefined;
-  buttonStyle: "icon" | "button";
+  buttonStyle?: "icon" | "button";
 }) {
   const [taskName, setTaskName] = useState<string>("");
   const [taskDescription, setTaskDescription] = useState<string>("");
@@ -46,9 +46,9 @@ function CreateTask({
 
       {buttonStyle === "icon" && (
         <label htmlFor="my-modal-4">
-          <div className="btn btn-sm mb-2 flex w-max gap-3 py-1 text-[10px]">
+          <div className="btn btn-sm mb-2 flex w-max gap-1 py-1 text-[10px]">
             <IoCreateOutline className="h-4 w-4" />
-            create task
+            add task
           </div>
         </label>
       )}
@@ -69,7 +69,7 @@ function CreateTask({
             <div className="button ml-auto w-max p-3">
               <Button
                 handleClick={handleCreateTask}
-                extraClass="btn btn-sm btn-primary"
+                extraClass="btn btn-sm btn-primary text-white"
               >
                 Create task
               </Button>
