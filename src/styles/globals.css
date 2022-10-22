@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  background: rgb(54, 54, 60);
+  color: rgb(164, 164, 164);
+}
+
+.ql-toolbar.ql-snow {
+  background: rgba(0, 0, 0, 0.04);
+
+  border: 0px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.ql-container {
+  background: rgba(0, 0, 0, 0.04);
+
+  border: 0px !important;
+  border-top: 0px !important;
+}
+
+.ql-snow span,
+button,
+svg {
+  color: #a5a5a5 !important;
+  stroke: #a5a5a5;
+}
+
+.ql-stroke {
+  color: #a5a5a5;
+  stroke: #a5a5a5 !important;
+}
