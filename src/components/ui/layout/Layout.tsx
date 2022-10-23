@@ -21,11 +21,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Header />
-
       <main className="flex w-full">
         <Sidebar />
-        <div className="main-content w-full">{children}</div>
+        <div className="main-content w-full p-3">
+          <Header />
+
+          {children}
+        </div>
       </main>
     </>
   );

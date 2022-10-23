@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MdLogout } from "react-icons/md";
 
 function Header() {
   const links: Link[] = [
@@ -13,11 +14,7 @@ function Header() {
   }
 
   return (
-    <header className="flex w-full items-center justify-between gap-3 bg-zinc-900 px-3 py-1">
-      <Link href="/">
-        <a className="w-max min-w-[150px]">cluster</a>
-      </Link>
-
+    <header className="gap-3py-0 flex w-full items-center justify-between ">
       <nav className="toolbar w-full">
         {links && (
           <div className="nav-items flex w-full gap-12">
@@ -31,7 +28,9 @@ function Header() {
       </nav>
 
       <Link href="/api/auth/signout">
-        <div>log out</div>
+        <div className="w-max cursor-pointer">
+          <MdLogout />
+        </div>
       </Link>
     </header>
   );

@@ -39,22 +39,25 @@ function CreateTask({
   return (
     <div className="create-task">
       {buttonStyle === "button" && (
-        <label htmlFor="my-modal-4" className="modal-button btn btn-primary">
+        <label htmlFor="my-modal" className="modal-button btn btn-primary">
           Create task
         </label>
       )}
 
       {buttonStyle === "icon" && (
-        <label htmlFor="my-modal-4">
-          <div className="btn btn-sm mb-2 flex w-max gap-1 py-1 text-[10px]">
+        <label htmlFor="my-modal">
+          <div className="btn btn-sm mb-2 flex w-max gap-1 text-[10px]">
             <IoCreateOutline className="h-4 w-4" />
             add task
           </div>
         </label>
       )}
-      <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-      <label htmlFor="my-modal-4" className="modal cursor-pointer">
-        <label className="modal-box relative min-h-[300px] pb-16" htmlFor="">
+      <input type="checkbox" id="my-modal" className="modal-toggle" />
+      <label htmlFor="my-modal" className="modal cursor-pointer">
+        <label
+          className="modal-box relative min-h-[300px] bg-zinc-700 pb-16"
+          htmlFor=""
+        >
           <input
             type="text"
             autoFocus

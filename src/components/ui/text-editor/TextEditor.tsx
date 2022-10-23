@@ -1,12 +1,23 @@
 import { useState } from "react";
+import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
 
 type Props = {
   handleChange?: (e: string) => void;
-  initialValue?: string;
+  handleBlur?: (e: string) => void;
+  initialValue?: string | null;
+  toolbar?: boolean;
+  theme?: string;
+  placeholder?: string;
 };
 
-function TextEditor({ initialValue = "", handleChange }: Props) {
+function TextEditor({
+  theme = "snow",
+  initialValue = "",
+  handleChange,
+  placeholder,
+  handleBlur,
+}: Props) {
   const [value, setValue] = useState(initialValue);
 
   const ReactQuill =
@@ -20,11 +31,19 @@ function TextEditor({ initialValue = "", handleChange }: Props) {
     handleChange(e);
   }
 
+  function handleEditorBlur() {
+    if (!handleBlur) return;
+
+    handleBlur(value as string);
+  }
+
   return (
     <ReactQuill
       className="rounded-lg"
-      theme="snow"
+      theme={theme}
       value={value}
+      onBlur={handleEditorBlur}
+      placeholder={placeholder || "Insert text"}
       onChange={(e: string) => handleEditorChange(e)}
     />
   );

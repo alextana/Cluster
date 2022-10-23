@@ -25,6 +25,29 @@ export const taskRouter = router({
         tasks,
       };
     }),
+  getById: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const task = await ctx.prisma.task.findUnique({
+        where: {
+          id: input,
+        },
+      });
+
+      let project = null;
+
+      if (task) {
+        project = await ctx.prisma.project.findUnique({
+          where: {
+            id: task.projectId as string,
+          },
+        });
+      }
+      return {
+        task: task,
+        project: project,
+      };
+    }),
   create: protectedProcedure
     .input(
       z.object({
@@ -77,6 +100,27 @@ export const taskRouter = router({
           status: status,
         },
       });
+      return task;
+    }),
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        status: z.string().nullish(),
+        description: z.string().nullish(),
+        estimated_time: z.date().nullish(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input;
+
+      const task = await ctx.prisma.task.update({
+        where: {
+          id: id,
+        },
+        data: input,
+      });
+
       return task;
     }),
 });
