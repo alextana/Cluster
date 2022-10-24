@@ -24,7 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <main className="flex w-full">
         <Sidebar />
         <div className="main-content w-full p-3">
-          <Header />
+          {/* <Header /> */}
 
           {children}
         </div>

@@ -55,7 +55,7 @@ function CreateTask({
       <input type="checkbox" id="my-modal" className="modal-toggle" />
       <label htmlFor="my-modal" className="modal cursor-pointer">
         <label
-          className="modal-box relative min-h-[300px] bg-zinc-700 pb-16"
+          className="modal-box relative min-h-[300px] bg-zinc-900 pb-16"
           htmlFor=""
         >
           <input
@@ -63,7 +63,7 @@ function CreateTask({
             autoFocus
             placeholder="Task name"
             onChange={(e) => setTaskName(e.target.value)}
-            className="input input-ghost input-sm mb-4 w-full max-w-xs"
+            className="input input-ghost input-sm mb-4 w-full max-w-xs text-xl font-bold text-white"
           />
 
           <TextEditor handleChange={(e) => setTaskDescription(e)} />

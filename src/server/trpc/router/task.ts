@@ -1,5 +1,6 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
+import { User } from "@prisma/client";
 
 export const taskRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => {
@@ -21,6 +22,8 @@ export const taskRouter = router({
         },
       });
 
+      // TODO - pair users to tasks
+
       return {
         tasks,
       };
@@ -34,9 +37,15 @@ export const taskRouter = router({
         },
       });
 
+      let assigned_to: User[] = [];
       let project = null;
 
       if (task) {
+        assigned_to = await ctx.prisma.user.findMany({
+          where: {
+            taskId: task.id as string,
+          },
+        });
         project = await ctx.prisma.project.findUnique({
           where: {
             id: task.projectId as string,
@@ -46,6 +55,7 @@ export const taskRouter = router({
       return {
         task: task,
         project: project,
+        assigned_to: assigned_to,
       };
     }),
   create: protectedProcedure
@@ -108,11 +118,16 @@ export const taskRouter = router({
         id: z.string(),
         status: z.string().nullish(),
         description: z.string().nullish(),
+        name: z.string(),
         estimated_time: z.date().nullish(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const { id } = input;
+
+      if (!input.name) {
+        input.name = "";
+      }
 
       const task = await ctx.prisma.task.update({
         where: {

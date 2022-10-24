@@ -42,17 +42,26 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?        @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
-  Round         Round?    @relation(fields: [roundId], references: [id])
+  Round         Round?         @relation(fields: [roundId], references: [id])
   roundId       String?
-  Task          Task?     @relation(fields: [taskId], references: [id])
   taskId        String?
+  Team          Team?          @relation(fields: [teamId], references: [id])
+  teamId        String?
+  UsersOnTasks  UsersOnTasks[]
+}
+
+model Team {
+  id       String    @id @default(cuid())
+  name     String?
+  members  User[]
+  projects Project[]
 }
 
 model VerificationToken {
@@ -64,18 +73,18 @@ model VerificationToken {
 }
 
 model Task {
-  id             String    @id @default(cuid())
+  id             String         @id @default(cuid())
   name           String
   description    String?
-  rounds         Round?    @relation(fields: [roundId], references: [id])
-  assigned_to    User[]
+  rounds         Round?         @relation(fields: [roundId], references: [id])
   deleted_at     DateTime?
   status         String?
   created_at     DateTime?
   roundId        String?
   estimated_time DateTime?
-  Project        Project?  @relation(fields: [projectId], references: [id])
+  Project        Project?       @relation(fields: [projectId], references: [id])
   projectId      String?
+  UsersOnTasks   UsersOnTasks[]
 }
 
 model Round {
@@ -91,6 +100,17 @@ model Round {
   created_at     DateTime?
 }
 
+model UsersOnTasks {
+  task       Task     @relation(fields: [taskId], references: [id])
+  taskId     String // relation scalar field (used in the `@relation` attribute above)
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([taskId, userId])
+}
+
 model Project {
   id          String      @id @default(cuid())
   name        String
@@ -102,6 +122,8 @@ model Project {
   description String?
   Roadmap     Roadmap?    @relation(fields: [roadmapId], references: [id])
   roadmapId   String?
+  Team        Team?       @relation(fields: [teamId], references: [id])
+  teamId      String?
 }
 
 model Roadmap {
