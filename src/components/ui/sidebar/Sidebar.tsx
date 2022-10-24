@@ -39,7 +39,7 @@ function Sidebar() {
         {links.map((link: { name: string; icon: React.ReactElement }) => (
           <div
             key={link.name}
-            className="link-display group mb-4 flex cursor-pointer items-center gap-2 text-xs font-bold text-white hover:text-white"
+            className="link-display group mb-5 flex cursor-pointer items-center gap-2 text-sm font-bold text-white hover:text-white"
           >
             <div className="link-icon">{link.icon}</div>
             <div className="link-name">{link.name}</div>

@@ -17,6 +17,11 @@ export default defineNextConfig({
   reactStrictMode: true,
   swcMinify: true,
   "baseUrl": ".",
+  "images": {
+    domains: [
+      "lh3.googleusercontent.com",
+    ],
+  },
   "paths": {
     "@/components/*": ["/src/components/*"]
   },

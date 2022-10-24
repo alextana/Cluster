@@ -16,7 +16,7 @@
 
 .ql-container {
   background: transparent;
-  min-height: 170px;
+  min-height: max-content;
   border: 0px !important;
   border-top: 0px !important;
 }
@@ -30,6 +30,11 @@
 .ql-editor {
   transition: 0.3s ease;
   border: 1.5px solid transparent;
+}
+
+.ql-bubble {
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0.5rem;
 }
 
 .ql-editor.ql-blank::before {

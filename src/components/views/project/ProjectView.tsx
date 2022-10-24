@@ -21,7 +21,6 @@ function ProjectView({ project }: { project: Project | null }) {
       <div className="top-bar flex items-center gap-6 pb-2">
         <Link href="/">
           <div className="flex w-max cursor-pointer items-center gap-2 hover:text-white">
-            {/* <IoIosArrowBack /> */}
             <h1 className="text-2xl font-extrabold tracking-tighter text-white">
               {project?.name}
             </h1>

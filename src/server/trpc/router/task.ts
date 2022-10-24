@@ -23,7 +23,6 @@ export const taskRouter = router({
       });
 
       // TODO - pair users to tasks
-
       return {
         tasks,
       };
@@ -39,6 +38,8 @@ export const taskRouter = router({
 
       let assigned_to: User[] = [];
       let project = null;
+      let comments = null;
+      let users = null;
 
       if (task) {
         assigned_to = await ctx.prisma.user.findMany({
@@ -51,9 +52,28 @@ export const taskRouter = router({
             id: task.projectId as string,
           },
         });
+        comments = await ctx.prisma.comment.findMany({
+          where: {
+            taskId: task.id as string,
+          },
+        });
       }
+
+      // also get all users that have comments
+      if (comments) {
+        const userIds = comments.map((f) => f.userId);
+
+        users = await ctx.prisma.user.findMany({
+          where: {
+            id: { in: userIds },
+          },
+        });
+      }
+
       return {
         task: task,
+        users: users,
+        comments: comments,
         project: project,
         assigned_to: assigned_to,
       };

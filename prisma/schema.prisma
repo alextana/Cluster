@@ -55,6 +55,7 @@ model User {
   Team          Team?          @relation(fields: [teamId], references: [id])
   teamId        String?
   UsersOnTasks  UsersOnTasks[]
+  Comment       Comment[]
 }
 
 model Team {
@@ -72,6 +73,17 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model Comment {
+  id         String    @id @default(cuid())
+  author     User      @relation(fields: [userId], references: [id])
+  content    String
+  userId     String
+  created_at DateTime?
+  updated_at DateTime?
+  Task       Task?     @relation(fields: [taskId], references: [id])
+  taskId     String?
+}
+
 model Task {
   id             String         @id @default(cuid())
   name           String
@@ -80,6 +92,7 @@ model Task {
   deleted_at     DateTime?
   status         String?
   created_at     DateTime?
+  comments       Comment[]
   roundId        String?
   estimated_time DateTime?
   Project        Project?       @relation(fields: [projectId], references: [id])
