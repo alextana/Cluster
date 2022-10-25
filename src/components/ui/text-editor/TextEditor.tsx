@@ -8,6 +8,7 @@ type Props = {
   initialValue?: string | null;
   toolbar?: boolean;
   theme?: string;
+  className?: string;
   placeholder?: string;
 };
 
@@ -17,6 +18,7 @@ function TextEditor({
   handleChange,
   placeholder,
   handleBlur,
+  className,
 }: Props) {
   const [value, setValue] = useState(initialValue);
 
@@ -39,7 +41,7 @@ function TextEditor({
 
   return (
     <ReactQuill
-      className="rounded-lg"
+      className={`rounded-lg ${className}`}
       theme={theme}
       value={value}
       onBlur={handleEditorBlur}

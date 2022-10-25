@@ -8,8 +8,8 @@ import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { useState } from "react";
 import { userAtom } from "../../../store/Auth";
 import { useAtom } from "jotai";
-import { Comment } from "@prisma/client";
-import Image from "next/image";
+import TaskComments from "../../../components/ui/display/comments/TaskComments";
+import AvatarGroup from "../../../components/ui/display/avatars/AvatarGroup";
 
 function TaskId() {
   const router = useRouter();
@@ -20,6 +20,8 @@ function TaskId() {
 
   const [comment, setComment] = useState<string>("");
   const [taskName, setTaskName] = useState<string>("");
+
+  const [commentUpdated, setCommentUpdated] = useState<number>(0);
 
   const task = trpc.task.getById.useQuery(id as string);
   const updatedTask = trpc.task.update.useMutation();
@@ -66,6 +68,7 @@ function TaskId() {
     createComment.mutate(newComment, {
       onSuccess: () => {
         utils.task.getById.invalidate();
+        setCommentUpdated(commentUpdated + 1);
       },
     });
   };
@@ -87,8 +90,6 @@ function TaskId() {
     }
   };
 
-  console.log(commentData);
-
   return (
     <div className="task-view">
       <div className="top-task-view-navigation flex items-center gap-3">
@@ -105,24 +106,19 @@ function TaskId() {
         </div>
       </div>
       <div className="task my-2 rounded-md border border-white/10 bg-zinc-800 p-4 shadow-2xl">
-        <div className="flex items-center gap-6">
-          {/* <Link href={`/projects/${taskData?.projectId}`}>
-          <div className="flex w-max cursor-pointer items-center gap-2 hover:text-white">
-            <IoIosArrowBack />
-            <h1 className="text-lg">{task?.data?.task?.name}</h1>
-          </div>
-        </Link> */}
-        </div>
         <div className="task-layout flex flex-wrap gap-3 lg:flex-nowrap">
           <div className="task-name-desc w-full p-3">
-            <input
-              type="text"
-              onBlur={handleTitleBlur}
-              placeholder="Set task name"
-              defaultValue={taskData?.name}
-              onChange={(e) => setTaskName(e.target.value)}
-              className="input input-ghost input-sm mb-4 w-full max-w-full text-2xl font-extrabold tracking-tighter"
-            />
+            <div className="task-title mb-4 flex items-center gap-1">
+              <AvatarGroup users={task?.data?.assigned_to} />
+              <input
+                type="text"
+                onBlur={handleTitleBlur}
+                placeholder="Set task name"
+                defaultValue={taskData?.name}
+                onChange={(e) => setTaskName(e.target.value)}
+                className="input input-ghost input-sm w-full max-w-full text-2xl font-extrabold tracking-tighter"
+              />
+            </div>
 
             <TextEditor
               theme="bubble"
@@ -131,65 +127,39 @@ function TaskId() {
               initialValue={taskData?.description}
             />
 
-            <div className="activity mt-8 p-3">
-              <h3 className="text-xl font-extrabold tracking-tighter">
-                Activity
-              </h3>
-            </div>
+            <div className="activity-comments mx-auto max-w-[800px]">
+              <div className="activity mt-8 p-3">
+                <h3 className="text-xl font-extrabold tracking-tighter">
+                  Activity
+                </h3>
+              </div>
 
-            <div className="comments p-3">
-              <h3 className="mb-3 text-xl font-extrabold tracking-tighter">
-                Comments
-              </h3>
-              {/* comments here */}
-              {commentData && (
-                <>
-                  {commentData.map((comment: Comment) => (
-                    <div className="comment mb-2 gap-3" key={comment.id}>
-                      <div className="user-image flex items-center gap-1">
-                        <Image
-                          src={
-                            task?.data?.users?.find(
-                              (f) => f.id === comment.userId
-                            )?.image || ""
-                          }
-                          width="25"
-                          height="25"
-                          className="rounded-full"
-                          alt="Author image"
-                        />
-                        <h4 className="text-xs font-bold">
-                          {
-                            task?.data?.users?.find(
-                              (f) => f.id === comment.userId
-                            )?.name
-                          }
-                        </h4>
-                        <p className="text-[9px]">
-                          {comment.created_at?.toLocaleDateString() || ""}
-                        </p>
-                      </div>
-                      <div
-                        className="comment ml-[30px] text-sm"
-                        dangerouslySetInnerHTML={{ __html: comment.content }}
-                      />
-                    </div>
-                  ))}
-                </>
-              )}
-
-              <TextEditor
-                handleChange={(e) => setComment(e)}
-                theme="bubble"
-                placeholder="Write a comment"
-              />
-              <div className="save-comment mt-2 flex w-full gap-2">
-                <button
-                  onClick={handleSaveComment}
-                  className="btn btn-primary btn-sm ml-auto"
-                >
-                  comment
-                </button>
+              <div className="comments p-3">
+                <h3 className="mb-3 text-xl font-extrabold tracking-tighter">
+                  Comments
+                </h3>
+                {commentData && (
+                  <TaskComments
+                    commentData={commentData}
+                    task={taskData}
+                    users={task?.data?.users}
+                  />
+                )}
+                <TextEditor
+                  key={commentUpdated}
+                  handleChange={(e) => setComment(e)}
+                  theme="bubble"
+                  className="test mt-4 !text-lg"
+                  placeholder="Write a comment"
+                />
+                <div className="save-comment mt-2 flex w-full gap-2">
+                  <button
+                    onClick={handleSaveComment}
+                    className="btn btn-primary btn-sm ml-auto"
+                  >
+                    comment
+                  </button>
+                </div>
               </div>
             </div>
           </div>

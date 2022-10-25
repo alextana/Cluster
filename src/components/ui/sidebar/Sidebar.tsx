@@ -28,7 +28,7 @@ function Sidebar() {
     },
   ];
   return (
-    <aside className="h-screen w-[210px] border-r border-zinc-400/30 bg-zinc-900 p-4">
+    <aside className="h-screen w-[280px] border-r border-zinc-400/30 bg-zinc-900 p-4">
       <Link href="/">
         <a className="w-max min-w-[150px] text-2xl font-extrabold italic tracking-tighter text-white">
           cluster

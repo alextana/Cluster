@@ -50,7 +50,11 @@ function ProjectView({ project }: { project: Project | null }) {
           {tasks.isError && <div>whoops! something went wrong</div>}
 
           {tasks.data && tasks.data?.tasks?.length > 0 ? (
-            <DisplayTasks projectId={project?.id} tasks={tasks.data.tasks} />
+            <DisplayTasks
+              projectId={project?.id}
+              tasks={tasks.data.tasks}
+              assigned_to={tasks.data.assigned_to}
+            />
           ) : (
             <React.Fragment>
               {!tasks.isLoading && (

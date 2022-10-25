@@ -1,6 +1,6 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
-import { User } from "@prisma/client";
+import { User, UsersOnTasks } from "@prisma/client";
 
 export const taskRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => {
@@ -36,13 +36,13 @@ export const taskRouter = router({
         },
       });
 
-      let assigned_to: User[] = [];
+      let assigned_to: UsersOnTasks[] = [];
       let project = null;
       let comments = null;
       let users = null;
 
       if (task) {
-        assigned_to = await ctx.prisma.user.findMany({
+        assigned_to = await ctx.prisma.usersOnTasks.findMany({
           where: {
             taskId: task.id as string,
           },

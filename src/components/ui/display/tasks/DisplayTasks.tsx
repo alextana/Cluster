@@ -1,9 +1,10 @@
-import { Task } from "@prisma/client";
+import { Task, UsersOnTasks } from "@prisma/client";
 import CreateTask from "../../modals/CreateTask";
 import { MdDeleteOutline } from "react-icons/md";
 import { trpc } from "../../../../utils/trpc";
 
 import { Popover } from "../../popover/Popover";
+import { HiOutlinePlus } from "react-icons/hi";
 import React from "react";
 import Link from "next/link";
 
@@ -12,9 +13,11 @@ type State = { name: string; color: string };
 function DisplayTasks({
   projectId,
   tasks,
+  assigned_to,
 }: {
   projectId: string | undefined;
   tasks: Task[];
+  assigned_to: UsersOnTasks[];
 }) {
   const utils = trpc.useContext();
 
@@ -79,7 +82,7 @@ function DisplayTasks({
                   .map((task: Task, i: number) => (
                     <Link key={task.id} href={`/projects/tasks/${task.id}`}>
                       <div
-                        className={`task flex w-full cursor-pointer items-center gap-3 px-2 py-2 text-xs hover:bg-gray-500/20 ${
+                        className={`task flex w-full cursor-pointer items-center gap-3 px-2 py-4 text-sm hover:bg-gray-500/20 ${
                           i % 2 === 0 ? "bg-zinc-800" : "bg-zinc-800/60"
                         }`}
                       >
@@ -106,14 +109,25 @@ function DisplayTasks({
                           </div>
                         </Popover>
                         <div className="name">{task.name}</div>
-                        <div className="eta">
-                          {task?.estimated_time?.toString()}
-                        </div>
-                        <div className="delete ml-auto hover:text-blue-500">
-                          <MdDeleteOutline
-                            onClick={(e) => handleDeleteTask(e, task.id)}
-                            className="h-5 w-5 cursor-pointer"
-                          />
+                        <div className="right-side ml-auto flex items-center gap-3">
+                          <div className="assigned-to">
+                            {assigned_to && assigned_to.length > 0 ? (
+                              <div>show assigned</div>
+                            ) : (
+                              <div className="grid h-6 w-6 place-content-center rounded-full border border-dashed border-gray-400 bg-transparent">
+                                <HiOutlinePlus className="h-3 w-3" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="eta">
+                            {task?.estimated_time?.toString()}
+                          </div>
+                          <div className="delete ml-auto hover:text-blue-500">
+                            <MdDeleteOutline
+                              onClick={(e) => handleDeleteTask(e, task.id)}
+                              className="h-5 w-5 cursor-pointer"
+                            />
+                          </div>
                         </div>
                       </div>
                     </Link>

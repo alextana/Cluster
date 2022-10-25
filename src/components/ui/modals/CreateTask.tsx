@@ -70,12 +70,13 @@ function CreateTask({
 
           <div className="toggles absolute bottom-0 right-0 w-full border-t border-white/10">
             <div className="button ml-auto w-max p-3">
-              <Button
-                handleClick={handleCreateTask}
-                extraClass="btn btn-sm btn-primary text-white"
+              <label
+                onClick={handleCreateTask}
+                className="btn btn-primary btn-sm text-white"
+                htmlFor="my-modal"
               >
                 Create task
-              </Button>
+              </label>
             </div>
           </div>
         </label>
