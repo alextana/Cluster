@@ -40,7 +40,7 @@ export const Popover = ({
       <PopoverContent
         ref={ref}
         onClick={(e) => handleContentClick(e)}
-        className="mt-1 overflow-hidden rounded-md border border-white/10 bg-zinc-900/80 shadow-2xl backdrop-blur-md"
+        className="z-[300] mt-1 overflow-hidden rounded-md border border-white/10 bg-zinc-900/80 shadow-2xl backdrop-blur-md"
       >
         {children}
       </PopoverContent>

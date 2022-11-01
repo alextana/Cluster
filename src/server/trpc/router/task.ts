@@ -1,6 +1,6 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
-import { User, UsersOnTasks } from "@prisma/client";
+import { UsersOnTasks } from "@prisma/client";
 
 export const taskRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => {
@@ -19,6 +19,9 @@ export const taskRouter = router({
       tasks = await ctx.prisma.task.findMany({
         where: {
           projectId: id,
+        },
+        include: {
+          UsersOnTasks: true,
         },
       });
 
@@ -157,5 +160,62 @@ export const taskRouter = router({
       });
 
       return task;
+    }),
+  assignToTask: protectedProcedure
+    .input(
+      z.object({
+        taskId: z.string(),
+        email: z.string().nullish(),
+        name: z.string().nullish(),
+        image: z.string().nullish(),
+        userId: z.string(),
+        assigner: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { userId, taskId, assigner, email, name, image } = input;
+
+      const updatedTask = await ctx.prisma.usersOnTasks.upsert({
+        where: {
+          taskId_userId: {
+            taskId: taskId,
+            userId: "",
+          },
+        },
+        update: {
+          userId: userId,
+        },
+        create: {
+          userId: userId,
+          name: name,
+          image: image,
+          email: email,
+          taskId: taskId,
+          assignedBy: assigner,
+        },
+      });
+
+      return updatedTask;
+    }),
+  removeFromTask: protectedProcedure
+    .input(
+      z.object({
+        taskId: z.string(),
+        userId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { userId, taskId } = input;
+
+      const deletedTask = await ctx.prisma.usersOnTasks.delete({
+        where: {
+          taskId_userId: {
+            taskId: taskId,
+            userId: userId,
+          },
+        },
+      });
+
+      return deletedTask;
     }),
 });

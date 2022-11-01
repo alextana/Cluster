@@ -24,6 +24,9 @@ function TaskId() {
   const [commentUpdated, setCommentUpdated] = useState<number>(0);
 
   const task = trpc.task.getById.useQuery(id as string);
+  const assignedUsers = trpc.user.getAssignedByTask.useQuery({
+    taskId: id as string,
+  });
   const updatedTask = trpc.task.update.useMutation();
   const createComment = trpc.comment.create.useMutation();
 
@@ -109,7 +112,7 @@ function TaskId() {
         <div className="task-layout flex flex-wrap gap-3 lg:flex-nowrap">
           <div className="task-name-desc w-full p-3">
             <div className="task-title mb-4 flex items-center gap-1">
-              <AvatarGroup users={task?.data?.assigned_to} />
+              {assignedUsers.data && <AvatarGroup users={assignedUsers.data} />}
               <input
                 type="text"
                 onBlur={handleTitleBlur}

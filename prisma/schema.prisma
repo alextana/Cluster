@@ -42,27 +42,20 @@ model Session {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  name          String?
-  email         String?        @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  Round         Round?         @relation(fields: [roundId], references: [id])
-  roundId       String?
-  taskId        String?
-  Team          Team?          @relation(fields: [teamId], references: [id])
-  teamId        String?
-  UsersOnTasks  UsersOnTasks[]
-  Comment       Comment[]
-}
-
-model Team {
-  id       String    @id @default(cuid())
-  name     String?
-  members  User[]
-  projects Project[]
+  id                   String                 @id @default(cuid())
+  name                 String?
+  email                String?                @unique
+  emailVerified        DateTime?
+  image                String?
+  accounts             Account[]
+  sessions             Session[]
+  // Round         Round?         @relation(fields: [roundId], references: [id])
+  Team                 Team?                  @relation(fields: [teamId], references: [id])
+  teamId               String?
+  UsersOnTasks         UsersOnTasks[]
+  Comment              Comment[]
+  first_login          Boolean                @default(true)
+  UsersOnOrganisations UsersOnOrganisations[]
 }
 
 model VerificationToken {
@@ -73,55 +66,32 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Comment {
-  id         String    @id @default(cuid())
-  author     User      @relation(fields: [userId], references: [id])
-  content    String
-  userId     String
-  created_at DateTime?
-  updated_at DateTime?
-  Task       Task?     @relation(fields: [taskId], references: [id])
-  taskId     String?
+model Organisation {
+  id                   String                 @id @default(cuid())
+  name                 String
+  created_at           DateTime?
+  updated_at           DateTime?
+  team                 Team[]
+  UsersOnOrganisations UsersOnOrganisations[]
 }
 
-model Task {
-  id             String         @id @default(cuid())
-  name           String
-  description    String?
-  rounds         Round?         @relation(fields: [roundId], references: [id])
-  deleted_at     DateTime?
-  status         String?
-  created_at     DateTime?
-  comments       Comment[]
-  roundId        String?
-  estimated_time DateTime?
-  Project        Project?       @relation(fields: [projectId], references: [id])
-  projectId      String?
-  UsersOnTasks   UsersOnTasks[]
-}
-
-model Round {
-  id             String    @id @default(cuid())
+model Team {
+  id             String        @id @default(cuid())
   name           String?
-  assigned_to    User[]
-  tasks          Task[]
-  starts_at      DateTime
-  status         String
-  estimated_time DateTime
-  milestoneId    String?
-  deleted_at     DateTime
+  members        User[]
+  projects       Project[]
+  Organisation   Organisation? @relation(fields: [organisationId], references: [id])
+  organisationId String?
   created_at     DateTime?
+  updated_at     DateTime?
 }
 
-model UsersOnTasks {
-  task       Task     @relation(fields: [taskId], references: [id])
-  taskId     String // relation scalar field (used in the `@relation` attribute above)
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String // relation scalar field (used in the `@relation` attribute above)
-  assignedAt DateTime @default(now())
-  assignedBy String
-
-  @@id([taskId, userId])
+model Roadmap {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  milestones  Project[]
+  Milestone   Milestone[]
 }
 
 model Project {
@@ -139,14 +109,6 @@ model Project {
   teamId      String?
 }
 
-model Roadmap {
-  id          String      @id @default(cuid())
-  name        String
-  description String?
-  milestones  Project[]
-  Milestone   Milestone[]
-}
-
 model Milestone {
   id             String    @id @default(cuid())
   name           String?
@@ -158,4 +120,93 @@ model Milestone {
   roadmapId      String?
   Project        Project?  @relation(fields: [projectId], references: [id])
   projectId      String?
+}
+
+// additional suibdivision on projects
+// categories are things like features/bugs/issues for software dev
+// or albums/tracks for a band for example
+model Category {
+  id         String    @id @default(cuid())
+  name       String
+  created_at DateTime?
+  updated_at DateTime?
+  Task       Task[]
+}
+
+model Task {
+  id             String         @id @default(cuid())
+  name           String
+  description    String?
+  // rounds         Round?         @relation(fields: [roundId], references: [id])
+  deleted_at     DateTime?
+  status         String?
+  created_at     DateTime?
+  priority       String?
+  comments       Comment[]
+  // roundId        String?
+  estimated_time DateTime?
+  Project        Project?       @relation(fields: [projectId], references: [id])
+  projectId      String?
+  UsersOnTasks   UsersOnTasks[]
+  categoryId     String?
+  Category       Category?      @relation(fields: [categoryId], references: [id])
+}
+
+model Comment {
+  id         String    @id @default(cuid())
+  author     User      @relation(fields: [userId], references: [id])
+  content    String
+  userId     String
+  created_at DateTime?
+  updated_at DateTime?
+  Task       Task?     @relation(fields: [taskId], references: [id])
+  taskId     String?
+}
+
+// A session similar to a sprint
+// where the tasks are collected
+// put together with an ETA
+// model Round {
+//   id             String    @id @default(cuid())
+//   name           String?
+//   assigned_to    User[]
+//   tasks          Task[]
+//   starts_at      DateTime
+//   status         String
+//   estimated_time DateTime
+//   milestoneId    String?
+//   deleted_at     DateTime
+//   created_at     DateTime?
+// }
+
+model Schedule {
+  id         String    @id @default(cuid())
+  name       String?
+  starts_at  DateTime?
+  ends_at    DateTime?
+  userId     String
+  created_at DateTime?
+}
+
+model UsersOnTasks {
+  task       Task     @relation(fields: [taskId], references: [id])
+  taskId     String // relation scalar field (used in the `@relation` attribute above)
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+  assignedBy String
+  image      String?
+  email      String?
+  name       String?
+
+  @@id([taskId, userId])
+}
+
+model UsersOnOrganisations {
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+  organisationId String
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String
+
+  @@id([userId, organisationId])
 }
