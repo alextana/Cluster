@@ -31,7 +31,7 @@ function DisplayOrganisation() {
                 className="org flex items-center gap-1"
               >
                 <div className="org-image grid h-[20px] w-[20px] place-content-center rounded-full bg-white">
-                  <span className="text-sm font-bold text-black">
+                  <span className="text-xs font-bold text-black">
                     {organisation?.name.charAt(0)}
                   </span>
                 </div>

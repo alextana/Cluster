@@ -31,8 +31,6 @@ function Homepage() {
     });
   };
 
-  console.log("s", allProjects);
-
   // if 0 projects then show a create project screen
 
   // otherwise show projects and other stuff

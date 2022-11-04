@@ -11,13 +11,17 @@ function CreateTask({
   buttonStyle?: "icon" | "button";
 }) {
   const [taskName, setTaskName] = useState<string>("");
+  const [key, setKey] = useState<number>(Math.random());
   const [taskDescription, setTaskDescription] = useState<string>("");
   const utils = trpc.useContext();
 
   const createTask = trpc.task.create.useMutation();
 
-  async function handleCreateTask() {
-    if (!taskName || !projectId) return;
+  async function handleCreateTask(e: React.MouseEvent<HTMLLabelElement>) {
+    if (!taskName || !projectId) {
+      e.preventDefault();
+      return;
+    }
 
     const task = {
       name: taskName,
@@ -30,7 +34,10 @@ function CreateTask({
 
     createTask.mutate(task, {
       onSuccess: () => {
+        setTaskDescription("");
+        setTaskName("");
         utils.task.getAllById.invalidate();
+        setKey(Math.random());
       },
     });
   }
@@ -62,15 +69,20 @@ function CreateTask({
             autoFocus
             placeholder="Task name"
             onChange={(e) => setTaskName(e.target.value)}
-            className="input input-ghost input-sm mb-4 w-full max-w-xs text-xl font-bold text-white"
+            value={taskName}
+            className="input input-ghost input-sm mb-4 w-full max-w-xs text-base text-white placeholder:text-zinc-500"
           />
 
-          <TextEditor handleChange={(e) => setTaskDescription(e)} />
+          <TextEditor
+            key={key}
+            handleChange={(e) => setTaskDescription(e)}
+            initialValue={taskDescription}
+          />
 
           <div className="toggles absolute bottom-0 right-0 w-full border-t border-white/10">
             <div className="button ml-auto w-max p-3">
               <label
-                onClick={handleCreateTask}
+                onClick={(e) => handleCreateTask(e)}
                 className="btn btn-primary btn-sm text-white"
                 htmlFor="my-modal"
               >

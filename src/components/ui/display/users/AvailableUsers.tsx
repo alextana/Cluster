@@ -64,7 +64,6 @@ function AvailableUsers({ task }: { task?: Task }) {
       },
       {
         onSuccess: () => {
-          console.log("succ");
           utils.task.getAllById.invalidate();
         },
       }

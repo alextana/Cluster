@@ -1,13 +1,13 @@
 import { Task, UsersOnTasks } from "@prisma/client";
 import CreateTask from "../../modals/CreateTask";
-import { MdDeleteOutline } from "react-icons/md";
+import { MdClose } from "react-icons/md";
+
 import { trpc } from "../../../../utils/trpc";
 
 import { Popover } from "../../popover/Popover";
+import { AssignUsers } from "../../popover/AssignUsers";
 import React from "react";
 import Link from "next/link";
-import AvailableUsers from "../users/AvailableUsers";
-import UserAssignment from "./UserAssignment";
 
 type State = { name: string; color: string };
 
@@ -118,25 +118,14 @@ function DisplayTasks({
                               {assigned_to && assigned_to.length > 0 ? (
                                 <div>show assigned</div>
                               ) : (
-                                <Popover
-                                  trigger={
-                                    <UserAssignment
-                                      currentTask={task}
-                                      tasks={tasks}
-                                    />
-                                  }
-                                >
-                                  <div className="select-user z-[100]">
-                                    <AvailableUsers task={task} />
-                                  </div>
-                                </Popover>
+                                <AssignUsers tasks={tasks} task={task} />
                               )}
                             </div>
                             <div className="eta">
                               {task?.estimated_time?.toString()}
                             </div>
                             <div className="delete ml-auto hover:text-blue-500">
-                              <MdDeleteOutline
+                              <MdClose
                                 onClick={(e) => handleDeleteTask(e, task.id)}
                                 className="h-5 w-5 cursor-pointer"
                               />
