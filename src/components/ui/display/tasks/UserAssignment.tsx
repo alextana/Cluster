@@ -18,9 +18,10 @@ function UserAssignment({
   if (assignedTo && assignedTo.length > 0) {
     return <AvatarGroup size="sm" users={assignedTo} />;
   }
+
   return (
-    <div className="avatar z-10 mr-[4px] grid h-[20px] w-[20px] transform place-content-center -space-x-6 rounded-full border border-dashed border-gray-400 bg-transparent transition-all hover:rotate-[180deg]">
-      <HiOutlinePlus className="h-3 w-3" />
+    <div className="z-10 mr-[4px] grid h-max transform place-content-center rounded-full border border-dashed border-gray-400 bg-transparent transition-all hover:rotate-[180deg]">
+      <HiOutlinePlus className="h-[23px] w-[23px] scale-[.6] transform" />
     </div>
   );
 }

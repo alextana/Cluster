@@ -69,14 +69,40 @@ function Tab({
     return <div>Whoops.. an error has occurred</div>;
   }
 
+  const percentage =
+    (Number(overview?.[tab.name]?.completed) /
+      Number(overview?.[tab.name]?.total)) *
+    100;
+
+  const complete =
+    (Number(overview?.[tab.name]?.completed) /
+      Number(overview?.[tab.name]?.total)) *
+      100 ===
+    100;
+
   return (
-    <div>
-      <h2 className="text-lg font-extrabold capitalize tracking-tighter">
-        {tab.name}
-      </h2>
-      <h3 className="text-3xl font-extrabold tracking-tighter">
-        {overview?.[tab.name]?.completed} / {overview?.[tab.name]?.total}
-      </h3>
+    <div className="flex items-center justify-between gap-6 transition-all">
+      <div className="main-info">
+        <h2 className="text-lg font-light capitalize">{tab.name}</h2>
+        <h3 className="text-3xl font-extrabold tracking-tighter">
+          {overview?.[tab.name]?.completed} / {overview?.[tab.name]?.total}
+        </h3>
+      </div>
+
+      <div className="progress-bar">
+        <div
+          className={`radial-progress bg-zinc-900/70 ${
+            complete ? "text-green-500" : ""
+          }`}
+          style={
+            {
+              "--value": percentage,
+            } as React.CSSProperties
+          }
+        >
+          {Math.round(percentage)} %
+        </div>
+      </div>
     </div>
   );
 }

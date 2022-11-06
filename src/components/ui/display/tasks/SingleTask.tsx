@@ -9,8 +9,11 @@ import TaskComments from "../../../../components/ui/display/comments/TaskComment
 import AvatarGroup from "../../../../components/ui/display/avatars/AvatarGroup";
 import Loading from "../../loading/Loading";
 import { expandedTask } from "../../../../store/General";
+import { useRouter } from "next/router";
 
 function SingleTask({ taskId }: { taskId: string }) {
+  const router = useRouter();
+
   const utils = trpc.useContext();
 
   const [user] = useAtom(userAtom);
@@ -91,11 +94,20 @@ function SingleTask({ taskId }: { taskId: string }) {
     }
   };
 
+  const handleClose = () => {
+    router.replace({
+      pathname: router.asPath.split("?")[0],
+      query: null,
+    });
+
+    setExpandedTask("");
+  };
+
   return (
     <div className="task-view">
       <div className="top-task-view-navigation flex items-center gap-3">
         <MdClose
-          onClick={() => setExpandedTask("")}
+          onClick={() => handleClose()}
           className="h-6 w-6 cursor-pointer"
         />
         <div className="task-nav flex items-center gap-1">
