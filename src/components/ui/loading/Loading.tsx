@@ -1,5 +1,14 @@
 function Loading() {
-  return <div>Loading...</div>;
+  return (
+    <div>
+      <div className="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  );
 }
 
 export default Loading;

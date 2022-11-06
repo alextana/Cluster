@@ -1,29 +1,36 @@
+import Link from "next/link";
 import { trpc } from "../../../../utils/trpc";
+import Loading from "../../../ui/loading/Loading";
 
 type TabType = {
   name: string;
   color?: string;
+  href?: string;
 };
 
 function ProjectOverview({ projectId }: { projectId: string }) {
   const overview = trpc.project.getStats.useQuery(projectId);
-  const tabs = [{ name: "tasks" }, { name: "milestones" }];
+  const tabs = [
+    { name: "tasks", href: `/tasks/${projectId}` },
+    { name: "milestones", href: `/milestones/${projectId}` },
+  ];
 
   return (
     <div className="overview-container">
       <div className="overview-tabs flex gap-3">
         {tabs.map((tab: TabType) => (
-          <div
-            className={`grid w-full rounded-xl border border-zinc-600 bg-zinc-800 p-6 shadow-sm`}
-            key={tab.name}
-          >
-            <Tab
-              tab={tab}
-              overview={overview.data}
-              isLoading={overview.isLoading}
-              isError={overview.isError}
-            />
-          </div>
+          <Link key={tab.name} href={tab.href as string}>
+            <a
+              className={`grid w-full rounded-xl border border-zinc-600 bg-zinc-800 p-6 shadow-sm hover:bg-zinc-900`}
+            >
+              <Tab
+                tab={tab}
+                overview={overview.data}
+                isLoading={overview.isLoading}
+                isError={overview.isError}
+              />
+            </a>
+          </Link>
         ))}
       </div>
     </div>
@@ -51,7 +58,11 @@ function Tab({
   isError: boolean;
 }) {
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="mx-auto w-full">
+        <Loading />
+      </div>
+    );
   }
 
   if (isError) {
