@@ -1,9 +1,13 @@
+import { User, UsersOnOrganisations } from "@prisma/client";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { trpc } from "../../../utils/trpc";
-import { UserOrg } from "./FirstLogin";
 
 type Inputs = {
   teamName: string;
+};
+
+type UserOrg = User & {
+  UsersOnOrganisations: UsersOnOrganisations[];
 };
 
 function CreateTeam({ user }: { user: UserOrg }) {

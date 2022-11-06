@@ -37,7 +37,7 @@ function TaskId() {
   const taskData = task.data.task;
   const commentData = task.data.comments;
 
-  const maybeUpdateTaskDescription = (e: React.ChangeEvent) => {
+  const maybeUpdateTaskDescription = (e: string) => {
     const taskToUpdate = task?.data?.task;
 
     if (!taskToUpdate) return;
