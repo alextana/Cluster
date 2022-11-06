@@ -2,15 +2,11 @@ import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import AllProjects from "../components/lists/projects/AllProjects";
 import Loading from "../components/ui/loading/Loading";
-import { userAtom } from "../store/Auth";
-import { useAtom } from "jotai";
 
 function Homepage() {
   const [projectTitle, setProjectTitle] = useState<string>("");
   const allProjects = trpc.project.getAll.useQuery();
   const utils = trpc.useContext();
-
-  const [user] = useAtom(userAtom);
 
   const createProject = trpc.project.create.useMutation();
 
@@ -32,9 +28,7 @@ function Homepage() {
   };
 
   // if 0 projects then show a create project screen
-
   // otherwise show projects and other stuff
-
   // check if you have any projects / goals
 
   if (allProjects.isLoading) return <Loading />;

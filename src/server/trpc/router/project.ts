@@ -36,6 +36,47 @@ export const projectRouter = router({
         milestones: milestones,
       };
     }),
+  getStats: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      // get stats
+      const totalTasks = await ctx.prisma.task.count({
+        where: {
+          projectId: input,
+        },
+      });
+
+      const completedTasks = await ctx.prisma.task.count({
+        where: {
+          projectId: input,
+          status: "closed",
+        },
+      });
+
+      const totalMilestones = await ctx.prisma.milestone.count({
+        where: {
+          projectId: input,
+        },
+      });
+
+      const completedMilestones = await ctx.prisma.milestone.count({
+        where: {
+          projectId: input,
+          status: "closed",
+        },
+      });
+
+      return {
+        tasks: {
+          total: totalTasks,
+          completed: completedTasks,
+        },
+        milestones: {
+          total: totalMilestones,
+          completed: completedMilestones,
+        },
+      };
+    }),
   create: protectedProcedure
     .input(
       z.object({

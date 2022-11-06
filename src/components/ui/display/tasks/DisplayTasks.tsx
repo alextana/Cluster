@@ -1,4 +1,4 @@
-import { Task, UsersOnTasks } from "@prisma/client";
+import { Task } from "@prisma/client";
 import CreateTask from "../../modals/CreateTask";
 import { MdClose } from "react-icons/md";
 
@@ -14,11 +14,9 @@ type State = { name: string; color: string };
 function DisplayTasks({
   projectId,
   tasks,
-  assigned_to,
 }: {
   projectId: string | undefined;
   tasks: Task[];
-  assigned_to: UsersOnTasks[];
 }) {
   const utils = trpc.useContext();
 
@@ -84,7 +82,7 @@ function DisplayTasks({
                     .map((task: Task, i: number) => (
                       <Link key={task.id} href={`/projects/tasks/${task.id}`}>
                         <div
-                          className={`task z-[-1] flex w-full cursor-pointer items-center gap-3 px-2 py-4 text-sm hover:bg-gray-500/20 ${
+                          className={`task z-[-1] flex w-full cursor-pointer items-center gap-3 px-2 py-1 text-sm hover:bg-gray-500/20 ${
                             i % 2 === 0 ? "bg-zinc-800" : "bg-zinc-800/60"
                           }`}
                         >
@@ -115,11 +113,7 @@ function DisplayTasks({
                           <div className="name">{task.name}</div>
                           <div className="right-side ml-auto flex items-center gap-3">
                             <div className="assigned-to">
-                              {assigned_to && assigned_to.length > 0 ? (
-                                <div>show assigned</div>
-                              ) : (
-                                <AssignUsers tasks={tasks} task={task} />
-                              )}
+                              <AssignUsers tasks={tasks} task={task} />
                             </div>
                             <div className="eta">
                               {task?.estimated_time?.toString()}
