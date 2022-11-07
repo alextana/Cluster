@@ -33,12 +33,14 @@ function ProjectOverview({
 
   return (
     <div className="overview-container">
-      {assignedUsers.data && assignedUsers.data?.length > 0 && (
-        <div className="assigned-users-to-project mb-4 flex items-center justify-between gap-5">
+      <div className="assigned-users-to-project mb-4 flex items-center justify-between gap-5">
+        {assignedUsers.data && assignedUsers.data?.length > 0 && (
           <AvatarGroup size="md" users={assignedUsers.data} />
-          <button className="btn btn-outline btn-sm text-xs">Invite</button>
-        </div>
-      )}
+        )}
+        <button className="btn btn-outline btn-sm ml-auto text-xs">
+          Invite
+        </button>
+      </div>
 
       <div className="overview-tabs items-centerss grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
         {tabs.map((tab: TabType) => (
