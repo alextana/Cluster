@@ -24,6 +24,26 @@ export const userRouter = router({
 
       return users;
     }),
+  getAllAssigned: protectedProcedure
+    .input(z.array(z.string()).nullish())
+    .query(async ({ ctx, input }) => {
+      if (!input) return;
+
+      const usersOnTasks = await ctx.prisma.usersOnTasks.findMany({
+        where: {
+          taskId: { in: input },
+        },
+      });
+
+      const userIds = Array.from(new Set(usersOnTasks?.map((f) => f.userId)));
+
+      const users = await ctx.prisma.user.findMany({
+        where: {
+          id: { in: userIds },
+        },
+      });
+      return users;
+    }),
   getAvailableAndAssigned: protectedProcedure
     .input(
       z.object({

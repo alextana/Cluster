@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import type { Session } from "next-auth";
 import type { AppType } from "next/app";
 import { trpc } from "../utils/trpc";
+import { Toaster } from "react-hot-toast";
 import Layout from "../components/ui/layout/Layout";
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -15,6 +16,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <Layout>
         <Component {...pageProps} />
       </Layout>
+      <Toaster position="bottom-center" />
     </SessionProvider>
   );
 };

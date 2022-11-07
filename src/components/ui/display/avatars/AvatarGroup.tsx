@@ -14,6 +14,8 @@ function AvatarGroup({
   useEffect(() => {
     if (size === "sm") {
       setImageSize("20");
+    } else if (size === "md") {
+      setImageSize("30");
     }
   }, [size]);
 

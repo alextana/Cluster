@@ -1,6 +1,8 @@
+import { Task, UsersOnTasks } from "@prisma/client";
 import Link from "next/link";
 import { trpc } from "../../../../utils/trpc";
 import Loading from "../../../ui/loading/Loading";
+import AvatarGroup from "../../../ui/display/avatars/AvatarGroup";
 
 type TabType = {
   name: string;
@@ -8,7 +10,21 @@ type TabType = {
   href?: string;
 };
 
-function ProjectOverview({ projectId }: { projectId: string }) {
+type TaskUser = (Task & { UsersOnTasks: UsersOnTasks[] })[];
+
+function ProjectOverview({
+  projectId,
+  tasks,
+}: {
+  projectId: string;
+  tasks: TaskUser | undefined;
+}) {
+  const taskIds = tasks?.map((f) => f?.id) as string[];
+
+  const assignedUsers = trpc.user.getAllAssigned.useQuery(taskIds, {
+    enabled: !!taskIds,
+  });
+
   const overview = trpc.project.getStats.useQuery(projectId);
   const tabs = [
     { name: "tasks", href: `/tasks/${projectId}` },
@@ -17,7 +33,14 @@ function ProjectOverview({ projectId }: { projectId: string }) {
 
   return (
     <div className="overview-container">
-      <div className="overview-tabs flex gap-3">
+      {assignedUsers.data && assignedUsers.data?.length > 0 && (
+        <div className="assigned-users-to-project mb-4 flex items-center justify-between gap-5">
+          <AvatarGroup size="md" users={assignedUsers.data} />
+          <button className="btn btn-outline btn-sm text-xs">Invite</button>
+        </div>
+      )}
+
+      <div className="overview-tabs items-centerss grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
         {tabs.map((tab: TabType) => (
           <Link key={tab.name} href={tab.href as string}>
             <a

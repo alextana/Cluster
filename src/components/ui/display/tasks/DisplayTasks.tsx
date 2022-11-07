@@ -11,6 +11,7 @@ import React, { useEffect } from "react";
 import SingleTask from "./SingleTask";
 import { expandedTask } from "../../../../store/General";
 import { useAtom } from "jotai";
+import toast from "react-hot-toast";
 
 type State = { name: string; textColor: string; backgroundColor: string };
 
@@ -57,6 +58,12 @@ function DisplayTasks({
     // TODO - modal to say are u sure??
     if (!id) return;
 
+    toast.promise(utils.task.getAllById.invalidate(), {
+      loading: "Deleting task...",
+      success: <b>Task deleted!</b>,
+      error: <b>Could not delete task.</b>,
+    });
+
     deleteTask.mutate(id, {
       onSuccess: () => {
         utils.task.getAllById.invalidate();
@@ -71,6 +78,12 @@ function DisplayTasks({
       id: id,
       status: state.name,
     };
+
+    toast.promise(utils.task.getAllById.invalidate(), {
+      loading: `Changing task to ${state.name}...`,
+      success: <b>Task set to {state.name}!</b>,
+      error: <b>Could not change task status.</b>,
+    });
 
     updateStatus.mutate(data, {
       onSuccess: () => {

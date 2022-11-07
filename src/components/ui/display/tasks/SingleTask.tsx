@@ -13,7 +13,6 @@ import { useRouter } from "next/router";
 
 function SingleTask({ taskId }: { taskId: string }) {
   const router = useRouter();
-
   const utils = trpc.useContext();
 
   const [user] = useAtom(userAtom);

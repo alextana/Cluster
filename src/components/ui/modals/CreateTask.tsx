@@ -2,6 +2,7 @@ import { useState } from "react";
 import { trpc } from "../../../utils/trpc";
 import TextEditor from "../text-editor/TextEditor";
 import { IoCreateOutline } from "react-icons/io5";
+import toast from "react-hot-toast";
 
 function CreateTask({
   projectId,
@@ -37,6 +38,11 @@ function CreateTask({
         setTaskDescription("");
         setTaskName("");
         utils.task.getAllById.invalidate();
+        toast.promise(utils.task.getAllById.invalidate(), {
+          loading: "Adding task...",
+          success: <b>Task added!</b>,
+          error: <b>Could not add task.</b>,
+        });
         setKey(Math.random());
       },
     });

@@ -7,18 +7,21 @@ import Link from "next/link";
 import DisplayTasks from "../../ui/display/tasks/DisplayTasks";
 import ProjectOverview from "./views/ProjectOverview";
 import React from "react";
+import { expandedTask } from "../../../store/General";
+import { useAtom } from "jotai";
 
 function ProjectView({ project }: { project: Project | null }) {
   const tasks = trpc.task.getAllById.useQuery({
     id: project?.id as string,
   });
+  const [taskExpanded] = useAtom(expandedTask);
 
   return (
     <div className="project-view w-full">
       <div className="top-bar flex items-center gap-6 pb-2">
         <Link href="/">
           <div className="flex w-max cursor-pointer items-center gap-2 hover:text-white">
-            <h1 className="text-2xl font-extrabold tracking-tighter text-white">
+            <h1 className="text-3xl font-light tracking-tighter text-white">
               {project?.name}
             </h1>
           </div>
@@ -27,9 +30,14 @@ function ProjectView({ project }: { project: Project | null }) {
 
       <div className="main-view flex gap-3 py-2">
         <div className="main-column w-full">
-          <div className="project-overview mb-8">
-            <ProjectOverview projectId={project?.id as string} />
-          </div>
+          {!taskExpanded && (
+            <div className="project-overview mb-8">
+              <ProjectOverview
+                tasks={tasks?.data?.tasks}
+                projectId={project?.id as string}
+              />
+            </div>
+          )}
           <React.Fragment>
             {tasks.isLoading && <Loading />}
             {tasks.isError && <div>whoops! something went wrong</div>}
