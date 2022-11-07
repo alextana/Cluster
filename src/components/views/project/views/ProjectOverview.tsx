@@ -42,7 +42,7 @@ function ProjectOverview({
         </button>
       </div>
 
-      <div className="overview-tabs items-centerss grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
+      <div className="overview-tabs items-centerss grid grid-cols-1 gap-3 md:grid-cols-2 2xl:grid-cols-4">
         {tabs.map((tab: TabType) => (
           <Link key={tab.name} href={tab.href as string}>
             <a

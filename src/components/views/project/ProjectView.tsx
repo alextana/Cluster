@@ -1,5 +1,4 @@
 import { Project } from "@prisma/client";
-// import { IoIosArrowBack } from "react-icons/io";
 import { trpc } from "../../../utils/trpc";
 import Loading from "../../ui/loading/Loading";
 import CreateTask from "../../ui/modals/CreateTask";
@@ -28,7 +27,7 @@ function ProjectView({ project }: { project: Project | null }) {
         </Link>
       </div>
 
-      <div className="main-view flex gap-3 py-2">
+      <div className="main-view flex flex-wrap gap-3 py-2 xl:flex-nowrap">
         <div className="main-column w-full">
           {!taskExpanded && (
             <div className="project-overview mb-8">
@@ -62,7 +61,9 @@ function ProjectView({ project }: { project: Project | null }) {
             )}
           </React.Fragment>
         </div>
-        <div className="info-column w-[30vw]">info about the project</div>
+        <div className="info-column min-h-[400px] w-[30vw]">
+          info about the project
+        </div>
       </div>
     </div>
   );

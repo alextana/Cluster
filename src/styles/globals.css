@@ -5,6 +5,8 @@
 :root {
   background: rgb(54, 54, 60);
   color: rgb(164, 164, 164);
+  margin: 0;
+  padding: 0;
 }
 
 .ql-toolbar.ql-snow {
