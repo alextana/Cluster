@@ -44,4 +44,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   if (status !== "loading") {
     return <Welcome />;
   }
+
+  return <></>;
 }
