@@ -15,6 +15,7 @@ function defineNextConfig(config) {
 
 export default defineNextConfig({
   reactStrictMode: true,
+  runtime: 'experimental-edge',
   swcMinify: true,
   "baseUrl": ".",
   "images": {
