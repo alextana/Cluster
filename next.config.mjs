@@ -21,6 +21,7 @@ export default defineNextConfig({
   "images": {
     domains: [
       "lh3.googleusercontent.com",
+      "cdn.discordapp.com",
     ],
   },
   "paths": {
